@@ -117,12 +117,16 @@ fonts-arphic-uming              \
 --enable-sysvmsg \
 --enable-sysvsem \
 --enable-sysvshm \
+--enable-shmop \
+--with-xsl \
 --with-tidy \
 --with-xmlrpc \
 --enable-zip \
 --with-libzip \
 --with-iconv-dir \
 --with-pear \
+--with-ldap \
+--with-ldap-sasl \
 --with-sodium \
 \
 && make -j${CPU_NUM} \

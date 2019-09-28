@@ -30,3 +30,13 @@ volumes:
   vhosts:
     driver: local
 ```
+
+Note
+-------------
+| Option | Default | Current
+| --- | --- | ---
+| session.cookie_secure | off | on
+| session.name | PHPSESSID | SERVSESSID
+| session.cookie_httponly | - | 1
+| session.cookie_samesite | - | Lax
+
