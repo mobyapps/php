@@ -24,6 +24,7 @@ RUN set -eux \
 && apt-get -y update            \
 && apt-get -y upgrade           \
 && apt-get -y install build-essential \
+autoconf                        \
 git                             \
 curl                            \
 re2c                            \
@@ -41,6 +42,8 @@ libfreetype6-dev                \
 libpng-dev                      \
 libjpeg-dev                     \
 libxml2-dev                     \
+libxslt1-dev                    \
+libargon2-0-dev                 \
 libbz2-dev                      \
 libcurl4-openssl-dev            \
 libgmp-dev                      \
@@ -56,8 +59,6 @@ ttf-wqy-microhei                \
 fonts-arphic-ukai               \
 fonts-arphic-uming              \
 \
-&& CPU_NUM=`cat /proc/cpuinfo | grep processor | wc -l` \
-\
 && groupadd group7 \
 && useradd -g group7 -M -d /usr/local/php user7 -s /sbin/nologin \
 \
@@ -70,9 +71,8 @@ fonts-arphic-uming              \
 && tar -zxf libsodium-${LIBSODIUM_VERSION}.tar.gz \
 \
 && cd /usr/local/src/libsodium-${LIBSODIUM_VERSION} \
-&& ./configure \
-&& make -j${CPU_NUM} \
-&& make install \
+&& ./configure --prefix=/usr/local/libsodium \
+&& make && make install \
 \
 && cd /usr/local/src/php-${PHP_VERSION} \
 && ./configure --prefix=/usr/local/php \
@@ -118,19 +118,18 @@ fonts-arphic-uming              \
 --enable-sysvsem \
 --enable-sysvshm \
 --enable-shmop \
+--enable-zip \
+--enable-zend-test \
 --with-xsl \
 --with-tidy \
 --with-xmlrpc \
---enable-zip \
 --with-libzip \
 --with-iconv-dir \
 --with-pear \
---with-ldap \
---with-ldap-sasl \
---with-sodium \
+--with-sodium=/usr/local/libsodium \
+--with-password-argon2 \
 \
-&& make -j${CPU_NUM} \
-&& make install \
+&& make && make install \
 \
 && cd /usr/local/src \
 && yes | cp ./php-fpm.conf /usr/local/php/etc/php-fpm.conf \
@@ -145,10 +144,7 @@ fonts-arphic-uming              \
 && echo '' >> ~/.bashrc \
 && echo 'export PATH="$PATH:/usr/local/php/bin"' >> ~/.bashrc \
 \
-&& curl -sL https://deb.nodesource.com/setup_8.x | bash - \
-&& apt-get install -y nodejs \
-&& node -v \
-&& npm -v \
+&& cd /usr/local/src \
 \
 && apt-get clean \
 && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
