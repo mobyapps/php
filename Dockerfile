@@ -3,7 +3,6 @@ FROM charescape/baseimage:master-amd64
 LABEL maintainer="charescape@outlook.com"
 
 ENV PHP_VERSION           7.3.10
-ENV LIBSODIUM_VERSION     1.0.18
 ENV COMPOSER_VERSION      1.9.0
 
 COPY ./startserv.sh                   /etc/my_init.d/
@@ -11,7 +10,6 @@ COPY ./conf/php.ini                   /usr/local/src/
 COPY ./conf/php-fpm.conf              /usr/local/src/
 COPY ./conf/www.conf                  /usr/local/src/
 COPY ./src/php-7.3.10.tar.gz          /usr/local/src/
-COPY ./src/libsodium-1.0.18.tar.gz    /usr/local/src/
 COPY ./src/composer                   /usr/local/bin/
 
 # see http://www.ruanyifeng.com/blog/2017/11/bash-set.html
@@ -53,6 +51,7 @@ libicu-dev                      \
 libzip-dev                      \
 libtidy-dev                     \
 libevent-dev                    \
+libsodium-dev                   \
 chromium-browser                \
 fonts-droid-fallback            \
 ttf-wqy-zenhei                  \
@@ -69,11 +68,6 @@ fonts-arphic-uming              \
 && cd /usr/local/src \
 \
 && tar -zxf php-${PHP_VERSION}.tar.gz \
-&& tar -zxf libsodium-${LIBSODIUM_VERSION}.tar.gz \
-\
-&& cd /usr/local/src/libsodium-${LIBSODIUM_VERSION} \
-&& ./configure --prefix=/usr/local/libsodium \
-&& make && make install \
 \
 && cd /usr/local/src/php-${PHP_VERSION} \
 && ./configure --prefix=/usr/local/php \
@@ -127,7 +121,7 @@ fonts-arphic-uming              \
 --with-libzip \
 --with-iconv-dir \
 --with-pear \
---with-sodium=/usr/local/libsodium \
+--with-sodium \
 --with-password-argon2 \
 \
 && make && make install \
