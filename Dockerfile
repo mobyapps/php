@@ -37,7 +37,7 @@ libedit-dev                     \
 libeditline-dev                 \
 libgd-dev                       \
 libwebp-dev                     \
-libfreetype6-dev=2.8.1-2        \
+libfreetype6-dev                \
 libpng-dev                      \
 libjpeg-dev                     \
 libxml2-dev                     \
@@ -93,7 +93,6 @@ fonts-arphic-uming              \
 --with-jpeg-dir \
 --with-png-dir \
 --with-xpm-dir \
---with-freetype-dir \
 --enable-gd-jis-conv \
 --with-gettext \
 --with-gmp \
