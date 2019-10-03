@@ -25,6 +25,7 @@ RUN set -eux \
 && apt-get -y upgrade           \
 && apt-get -y install build-essential \
 autoconf                        \
+pkg-config                      \
 git                             \
 curl                            \
 re2c                            \
@@ -38,7 +39,7 @@ libedit-dev                     \
 libeditline-dev                 \
 libgd-dev                       \
 libwebp-dev                     \
-libfreetype6-dev                \
+libfreetype6-dev=2.8.1-2        \
 libpng-dev                      \
 libjpeg-dev                     \
 libxml2-dev                     \
