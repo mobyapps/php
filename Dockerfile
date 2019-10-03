@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.11
+FROM charescape/baseimage:master-amd64
 
 LABEL maintainer="charescape@outlook.com"
 
