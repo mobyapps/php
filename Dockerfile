@@ -1,4 +1,4 @@
-FROM charescape/baseimage:master-amd64
+FROM phusion/baseimage:0.11
 
 LABEL maintainer="charescape@outlook.com"
 
@@ -89,6 +89,7 @@ fonts-arphic-uming              \
 --with-curl \
 --enable-exif \
 --with-gd \
+--with-freetype-dir \
 --with-webp-dir \
 --with-jpeg-dir \
 --with-png-dir \
