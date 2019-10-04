@@ -2,28 +2,30 @@ FROM phusion/baseimage:0.11
 
 LABEL maintainer="charescape@outlook.com"
 
-ENV PHP_VERSION           7.3.10
-ENV COMPOSER_VERSION      1.9.0
+ENV PHP_VERSION 7.3.10
+ENV PHP_HASH fb670723a9b8fda31c89529f27e0dda289d8af4b6ce9f152c8010876639c0fb4
+ENV COMPOSER_VERSION 1.9.0
+ENV COMPOSER_HASH c9dff69d092bdec14dee64df6677e7430163509798895fbd54891c166c5c0875
 
 COPY ./startserv.sh                   /etc/my_init.d/
 COPY ./conf/php.ini                   /usr/local/src/
 COPY ./conf/php-fpm.conf              /usr/local/src/
 COPY ./conf/www.conf                  /usr/local/src/
-COPY ./src/php-7.3.10.tar.gz          /usr/local/src/
-COPY ./src/composer                   /usr/local/bin/
 
 # see http://www.ruanyifeng.com/blog/2017/11/bash-set.html
 RUN set -eux \
 && export DEBIAN_FRONTEND=noninteractive \
-&& sed -i 's/http:\/\/archive.ubuntu.com/https:\/\/mirrors.tuna.tsinghua.edu.cn/' /etc/apt/sources.list \
-&& sed -i 's/http:\/\/security.ubuntu.com/https:\/\/mirrors.tuna.tsinghua.edu.cn/' /etc/apt/sources.list \
-&& sed -i 's/https:\/\/archive.ubuntu.com/https:\/\/mirrors.tuna.tsinghua.edu.cn/' /etc/apt/sources.list \
-&& sed -i 's/https:\/\/security.ubuntu.com/https:\/\/mirrors.tuna.tsinghua.edu.cn/' /etc/apt/sources.list \
+&& sed -i 's/http:\/\/archive.ubuntu.com/https:\/\/mirrors.cloud.tencent.com/' /etc/apt/sources.list \
+&& sed -i 's/http:\/\/security.ubuntu.com/https:\/\/mirrors.cloud.tencent.com/' /etc/apt/sources.list \
+&& sed -i 's/https:\/\/archive.ubuntu.com/https:\/\/mirrors.cloud.tencent.com/' /etc/apt/sources.list \
+&& sed -i 's/https:\/\/security.ubuntu.com/https:\/\/mirrors.cloud.tencent.com/' /etc/apt/sources.list \
+&& apt-get -y clean             \
 && apt-get -y update            \
 && apt-get -y upgrade           \
 && apt-get -y install build-essential \
 autoconf                        \
 pkg-config                      \
+wget                            \
 git                             \
 curl                            \
 re2c                            \
@@ -63,9 +65,13 @@ fonts-arphic-uming              \
 && useradd -g group7 -M -d /usr/local/php user7 -s /sbin/nologin \
 \
 && chmod +x /etc/my_init.d/startserv.sh \
-&& chmod +x /usr/local/bin/composer \
 \
 && cd /usr/local/src \
+\
+&& wget https://mirrors.sohu.com/php/php-${PHP_VERSION}.tar.gz -q --show-progress \
+&& echo "${PHP_HASH} *php-${PHP_VERSION}.tar.gz" | shasum -a 256 --check \
+&& PHP_HASH_CHECK=$? \
+&& if [ "$PHP_HASH_CHECK" -ne "0" ]; then echo "php-${PHP_VERSION}.tar.gz hash mismatch." && exit 1; fi \
 \
 && tar -zxf php-${PHP_VERSION}.tar.gz \
 \
@@ -138,6 +144,13 @@ fonts-arphic-uming              \
 \
 && echo '' >> ~/.bashrc \
 && echo 'export PATH="$PATH:/usr/local/php/bin"' >> ~/.bashrc \
+\
+&& cd /usr/local/bin/ \
+&& wget https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar -q --show-progress \
+&& echo "${COMPOSER_HASH} *composer.phar" | shasum -a 256 --check \
+&& COMPOSER_HASH_CHECK=$? \
+&& if [ "$COMPOSER_HASH_CHECK" -ne "0" ]; then echo "composer.phar hash mismatch." && exit 1; fi \
+&& chmod +x /usr/local/bin/composer.phar \
 \
 && cd /usr/local/src \
 \
