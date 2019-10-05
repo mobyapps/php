@@ -141,7 +141,7 @@ fonts-arphic-uming              \
 && kill -INT `cat /usr/local/php/var/run/php-fpm.pid` \
 \
 && echo '' >> ~/.bashrc \
-&& echo 'export PATH="$PATH:/usr/local/php/bin"' >> ~/.bashrc \
+&& echo 'export PATH="$PATH:/usr/local/php/bin:/usr/local/php/sbin"' >> ~/.bashrc \
 \
 && cd /usr/local/bin/ \
 && wget https://mirrors.aliyun.com/composer/composer.phar \
