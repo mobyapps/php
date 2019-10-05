@@ -15,11 +15,10 @@ COPY ./conf/www.conf                  /usr/local/src/
 # see http://www.ruanyifeng.com/blog/2017/11/bash-set.html
 RUN set -eux \
 && export DEBIAN_FRONTEND=noninteractive \
-&& sed -i 's/http:\/\/archive.ubuntu.com/https:\/\/mirrors.cloud.tencent.com/' /etc/apt/sources.list \
-&& sed -i 's/http:\/\/security.ubuntu.com/https:\/\/mirrors.cloud.tencent.com/' /etc/apt/sources.list \
-&& sed -i 's/https:\/\/archive.ubuntu.com/https:\/\/mirrors.cloud.tencent.com/' /etc/apt/sources.list \
-&& sed -i 's/https:\/\/security.ubuntu.com/https:\/\/mirrors.cloud.tencent.com/' /etc/apt/sources.list \
-&& apt-get -y clean             \
+&& sed -i 's/http:\/\/archive.ubuntu.com/https:\/\/mirrors.aliyun.com/' /etc/apt/sources.list \
+&& sed -i 's/http:\/\/security.ubuntu.com/https:\/\/mirrors.aliyun.com/' /etc/apt/sources.list \
+&& sed -i 's/https:\/\/archive.ubuntu.com/https:\/\/mirrors.aliyun.com/' /etc/apt/sources.list \
+&& sed -i 's/https:\/\/security.ubuntu.com/https:\/\/mirrors.aliyun.com/' /etc/apt/sources.list \
 && apt-get -y update            \
 && apt-get -y upgrade           \
 && apt-get -y install build-essential \
@@ -67,8 +66,7 @@ fonts-arphic-uming              \
 && chmod +x /etc/my_init.d/startserv.sh \
 \
 && cd /usr/local/src \
-\
-&& wget https://mirrors.sohu.com/php/php-${PHP_VERSION}.tar.gz -q --show-progress \
+&& wget https://mirrors.sohu.com/php/php-${PHP_VERSION}.tar.gz \
 && echo "${PHP_HASH} *php-${PHP_VERSION}.tar.gz" | shasum -a 256 --check \
 && PHP_HASH_CHECK=$? \
 && if [ "$PHP_HASH_CHECK" -ne "0" ]; then echo "php-${PHP_VERSION}.tar.gz hash mismatch." && exit 1; fi \
@@ -146,7 +144,7 @@ fonts-arphic-uming              \
 && echo 'export PATH="$PATH:/usr/local/php/bin"' >> ~/.bashrc \
 \
 && cd /usr/local/bin/ \
-&& wget https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar -q --show-progress \
+&& wget https://mirrors.aliyun.com/composer/composer.phar \
 && echo "${COMPOSER_HASH} *composer.phar" | shasum -a 256 --check \
 && COMPOSER_HASH_CHECK=$? \
 && if [ "$COMPOSER_HASH_CHECK" -ne "0" ]; then echo "composer.phar hash mismatch." && exit 1; fi \
